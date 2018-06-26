@@ -6,7 +6,6 @@
 #include "DetectorSD.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -26,8 +25,6 @@
 
 #include "MaterialExtension.hh"
 
-#include "G4Cache.hh"
-
 class DetectorConstructionMessenger;
 
 
@@ -35,9 +32,14 @@ const G4double world_hx = 1.0*m; ///< max world size
 const G4double world_hy = 1.0*m; ///< max world size
 const G4double world_hz = 1.0*m; ///< max world size
 const G4int layers = 3; ///< number of simulated laters in detector
+//const G4int layers = 4; ///< number of simulated laters in detector
 const G4double scinDim_x = 1.9*cm; ///<  X dimension of simulated strip
 const G4double scinDim_y = 0.7*cm; ///<  Y dimension of simulated strip
 const G4double scinDim_z = 50.0*cm; ///<  Z dimension of simulated strip
+
+//sks
+const G4double scinDim_xI = 2.5*cm; ///<  X dimension of simulated strip
+const G4double scinDim_yI = 0.6*cm; ///<  Y dimension of simulated strip
 
 const G4double wrappingThickness = 2*25.4*pow(10,-6)*m; ///<  total width of used wrapping 
 const G4double wrappingShift = 1*pow(10,-5)*m; ///<  free space between wrapping and scinitlator 
@@ -72,7 +74,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
 
     private:
-    static G4ThreadLocal G4bool fConstructedSDandField;
     static DetectorConstruction* fInstance;
 
     /// standard constructor
@@ -88,6 +89,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructFrameCAD();
     //// create only scintillators; dimensions are right now fixed in code
     void ConstructScintillators();
+    //// create fourth layer
+    void ConstructScintillatorsInnerLayer();
     //// create target used in run3 - big chamber no XAD material inside
     void ConstructTargetRun3();
 
@@ -112,7 +115,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     MaterialExtension* bigChamberMaterial;
 
     G4LogicalVolume * scinLog;
-    G4Cache<DetectorSD*>  detectorSD;
+    G4LogicalVolume * scinLogI;
 
 
 
